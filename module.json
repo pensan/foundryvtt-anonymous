@@ -12,9 +12,9 @@
         "scripts/main.js"
     ],
     "compatibility": {
-        "minimum": "12.328",
-        "verified": "12.328",
-        "maximum": "12"
+        "minimum": "13.342",
+        "verified": "13.342",
+        "maximum": "13"
     },
     "version": "1.6.2",
     "url": "https://github.com/reonZ/anonymous",
