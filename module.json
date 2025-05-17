@@ -20,7 +20,7 @@
     "url": "https://github.com/pensan/foundryvtt-anonymous",
     "readme": "https://github.com/pensan/foundryvtt-anonymous/blob/master/README.md",
     "manifest": "https://raw.githubusercontent.com/pensan/foundryvtt-anonymous/refs/heads/dev/module.json",
-    "download": "https://github.com/pensan/foundryvtt-anonymous/releases/download/1.6.3/module.zip",
+    "download": "https://github.com/pensan/foundryvtt-anonymous/releases/download/1.6.3-dev/module.zip",
     "changelog": "https://github.com/pensan/foundryvtt-anonymous/blob/master/CHANGELOG.md",
     "bugs": "https://github.com/pensan/foundryvtt-anonymous/issues",
     "styles": [

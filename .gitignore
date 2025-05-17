@@ -8,3 +8,4 @@ package*.json
 tsconfig.json
 jsconfig.json
 webpack*.*
+module.zip

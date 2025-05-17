@@ -2,18 +2,20 @@
     "name": "anonymous",
     "scripts": {
         "build": "esbuild src/main.js --bundle --keep-names --minify --sourcemap --outdir=scripts",
-        "dev": "esbuild src/main.js --bundle --keep-names --watch --sourcemap --outdir=scripts"
+        "dev": "esbuild src/main.js --bundle --keep-names --watch --sourcemap --outdir=scripts",
+        "zip": "zip -r module.zip module.json scripts styles lang tempaltes readme README.md CHANGELOG.md",
+        "tar": "tar -acf module.zip module.json scripts styles lang templates readme README.md CHANGELOG.md"
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/reonZ/anonymous.git"
+        "url": "git+https://github.com/pensan/foundryvtt-anonymous.git"
     },
     "author": "Idle",
     "license": "ISC",
     "bugs": {
-        "url": "https://github.com/reonZ/anonymous/issues"
+        "url": "https://github.com/pensan/foundryvtt-anonymous/issues"
     },
-    "homepage": "https://github.com/reonZ/anonymous#readme",
+    "homepage": "https://github.com/pensan/foundryvtt-anonymous#readme",
     "devDependencies": {
         "esbuild": "^0.17.19"
     }
