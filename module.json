@@ -16,13 +16,13 @@
         "verified": "13.342",
         "maximum": "13"
     },
-    "version": "1.6.2",
-    "url": "https://github.com/reonZ/anonymous",
-    "readme": "https://github.com/reonZ/anonymous/blob/master/README.md",
-    "manifest": "https://raw.githubusercontent.com/reonZ/anonymous/master/module.json",
-    "download": "https://github.com/reonZ/anonymous/releases/download/1.6.2/module.zip",
-    "changelog": "https://github.com/reonZ/anonymous/blob/master/CHANGELOG.md",
-    "bugs": "https://github.com/reonZ/anonymous/issues",
+    "version": "1.6.3",
+    "url": "https://github.com/pensan/foundryvtt-anonymous",
+    "readme": "https://github.com/pensan/foundryvtt-anonymous/blob/master/README.md",
+    "manifest": "https://raw.githubusercontent.com/pensan/foundryvtt-anonymous/refs/heads/dev/module.json",
+    "download": "https://github.com/pensan/foundryvtt-anonymous/releases/download/1.6.3/module.zip",
+    "changelog": "https://github.com/pensan/foundryvtt-anonymous/blob/master/CHANGELOG.md",
+    "bugs": "https://github.com/pensan/foundryvtt-anonymous/issues",
     "styles": [
         "styles/styles.css"
     ],
