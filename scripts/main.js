@@ -1,10 +1,775 @@
-(()=>{var ce=Object.defineProperty;var r=(e,t)=>ce(e,"name",{value:t,configurable:!0});var g="anonymous";function I(...e){return e=e.filter(t=>typeof t=="string"),`modules/${g}/templates/${e.join("/")}`}r(I,"templatePath");function z(){let e=game.data,t=e.users.find(n=>n._id===e.userId);return!!t&&t.role>=CONST.USER_ROLES.GAMEMASTER}r(z,"isGM");function R(e,t,n){return e.getFlag(g,t)??n}r(R,"getFlag");function b(e,t,n){return e.setFlag(g,t,n)}r(b,"setFlag");function u(...e){let[t,n]=e;return t=`${g}.${t}`,n?game.i18n.format(t,n):game.i18n.localize(t)}r(u,"localize");function U(e){let t=r((...n)=>u(`${e}.${n[0]}`,n[1]),"fn");return Object.defineProperties(t,{warn:{value:(...n)=>P(`${e}.${n[0]}`,n[1],n[2]),enumerable:!1,configurable:!1},info:{value:(...n)=>le(`${e}.${n[0]}`,n[1],n[2]),enumerable:!1,configurable:!1},error:{value:(...n)=>me(`${e}.${n[0]}`,n[1],n[2]),enumerable:!1,configurable:!1},has:{value:n=>hasLocalization(`${e}.${n}`),enumerable:!1,configurable:!1},path:{value:n=>localizePath(`${e}.${n}`),enumerable:!1,configurable:!1},template:{value:(n,{hash:o})=>t(n,o),enumerable:!1,configurable:!1}}),t}r(U,"subLocalize");function G(e){return e.combat.turns.filter(t=>t.actorId===e.actorId)}r(G,"getSameCombatants");function l(e){return game.settings.get(g,e)}r(l,"getSetting");function Y(e,t){return game.settings.set(g,e,t)}r(Y,"setSetting");function fe(e,t,n=!1){return e.tokens.filter(o=>o.actorId===t.id&&(!n||o.actorLink))}r(fe,"getActorSceneTokens");function j(e,t=!1){return game.scenes.map(n=>fe(n,e,t)).flat()}r(j,"getActorTokens");function F(e){return e?e[0].toUpperCase()+e.slice(1):""}r(F,"capitalize");function y(e){let t=e.name;e.scope=e.scope??"world",e.config=e.config??!1,e.config&&(e.name=p(t,"name"),e.hint=p(t,"hint")),Array.isArray(e.choices)&&(e.choices=e.choices.reduce((n,o)=>(n[o]=p(t,"choices",o),n),{})),game.settings.register(g,t,e)}r(y,"registerSetting");function V(e){let t=e.name;e.name=p("menus",t,"name"),e.label=p("menus",t,"label"),e.hint=p("menus",t,"hint"),e.restricted=e.restricted??!0,e.icon=e.icon??"fas fa-cogs",game.settings.registerMenu(g,t,e)}r(V,"registerSettingMenu");function p(...e){return`${g}.settings.${e.join(".")}`}r(p,"getSettingLocalizationPath");function E(){return game.modules.get(g)}r(E,"getCurrentModule");function v(e,t,n,o){let a=typeof t=="string"?t:"info",s=typeof t=="object"?t:typeof n=="object"?n:void 0,c=typeof t=="boolean"?t:typeof n=="boolean"?n:o??!1;ui.notifications.notify(u(e,s),a,{permanent:c})}r(v,"notify");function P(...e){let[t,n,o]=e;v(t,"warning",n,o)}r(P,"warn");function le(...e){let[t,n,o]=e;v(t,"info",n,o)}r(le,"info");function me(...e){let[t,n,o]=e;v(t,"error",n,o)}r(me,"error");function k(e,t,n,o=!1){let a=e.find("*");o&&(a=a.addBack()),a.contents().each((s,c)=>{c.nodeType===Node.TEXT_NODE&&c.textContent?.trim()&&$(c).replaceWith(c.textContent.replace(t,n))})}r(k,"replaceHTMLText");function O(e,t){e.token?W(e.token,t):j(e,!0).forEach(n=>W(n,t))}r(O,"updateActorTokens");function B(e,t){let n=e.object.actor;if(!n||n.hasPlayerOwner)return;let o=ue(n);o.addEventListener("click",()=>h(n)),t.find(".col.right").append(o)}r(B,"renderTokenHUD");function K(e){let t=e.actor;if(!t||t?.hasPlayerOwner)return;let n=e.displayName,o=m(e.actor),a=A(n),s=n;o&&!a&&l("token")?s=X(n):!o&&a&&(s=q(n)),s!==n&&e.updateSource({displayName:s})}r(K,"preCreateToken");function ue(e){let t=document.createElement("template"),n=m(e);return t.innerHTML=`<div class="control-icon${n?" active":""}" data-action="anonymous-toggle">
-    <i class="fa-solid fa-signature" title="${u("hud.title")}"></i>
-</div>`,t.content.firstChild}r(ue,"createToggle");function W(e,t){t?ge(e):de(e)}r(W,"changeDisplayName");function ge(e){let t=e.displayName;if(A(t)||!l("token"))return;let n=X(t);n!==t&&e.update({displayName:n})}r(ge,"showTokenName");function de(e){let t=e.displayName;if(pe(t))return;let n=q(t);e.update({displayName:n})}r(de,"hideTokenName");function pe(e){return!A(e)}r(pe,"isHidding");function A(e){return e===CONST.TOKEN_DISPLAY_MODES.HOVER||e===CONST.TOKEN_DISPLAY_MODES.ALWAYS}r(A,"isShowing");function q(e){return e===CONST.TOKEN_DISPLAY_MODES.HOVER?CONST.TOKEN_DISPLAY_MODES.OWNER_HOVER:e===CONST.TOKEN_DISPLAY_MODES.ALWAYS?CONST.TOKEN_DISPLAY_MODES.OWNER:e}r(q,"swapToHide");function X(e){return e===CONST.TOKEN_DISPLAY_MODES.OWNER_HOVER?CONST.TOKEN_DISPLAY_MODES.HOVER:e===CONST.TOKEN_DISPLAY_MODES.OWNER?CONST.TOKEN_DISPLAY_MODES.ALWAYS:e}r(X,"swapToShow");function m(e){return e instanceof Combatant&&e.actor&&(e=e.actor),e instanceof Actor&&e.hasPlayerOwner?!0:!!R(e,"showName")}r(m,"playersSeeName");async function h(e){let t=!m(e);e instanceof Actor||!e.actor?await b(e,"showName",t):await b(e.actor,"showName",t),canvas.tokens.hud?.rendered&&canvas.tokens.hud.render();let n=e instanceof Actor?e:e.actor;return n&&O(n,t),t}r(h,"toggleSeeName");function d(e){let t=u("unknown"),n=e instanceof Actor?e.type:e.actor?.type;return n?(M()[n]??"").trim()||D(t,n):t}r(d,"getName");function C(){ui.combat.render()}r(C,"refresh");function M(){return l("names")}r(M,"getSavedNames");function D(e,t){return`${e} ${F(t)}`}r(D,"formatUnknown");function J(e,t){ye({entries:t,defaultData:{name:n=>u(`context.${n}`),icon:"fa-solid fa-signature",callback:n=>{let o=n.attr("data-document-id"),a=game.actors.get(o);a&&h(a)},condition:(n,o)=>{let a=n.attr("data-document-id"),s=game.actors.get(a);return!!s&&!s.hasPlayerOwner&&(o==="show"?!m(s):m(s))}},choices:["show","hide"]})}r(J,"getActorDirectoryEntryContext");function Q(e,t){let n=foundry.utils.getProperty(t,`flags.${g}.showName}`)!==void 0;"ownership"in t&&(O(e,e.hasPlayerOwner),n=!0),n&&C()}r(Q,"onActorUpdate");function ye({entries:e,choices:t,defaultData:n={}}){Array.isArray(t)&&(t=t.reduce((o,a)=>(o[a]={},o),{}));for(let o in t){let a=t[o],s=a.name??(typeof n.name=="function"?n.name(o):n.name)??"",c=a.icon??(typeof n.icon=="function"?n.icon(o):n.icon)??"";if(!$(c).length){let i=$("<i></i>");i.addClass(c),c=i[0].outerHTML}e.unshift({name:s,icon:c,callback:i=>{a.callback?a.callback(i):n.callback&&n.callback(i,o)},condition:i=>a.condition?.(i)??n.condition?.(i,o)??!0})}}r(ye,"addSelectContextEntry");var N=class extends FormApplication{static get defaultOptions(){return foundry.utils.mergeObject(super.defaultOptions,{id:"anonymous-names-menu",title:u("templates.names.title"),template:I("names.html"),width:400})}getData(t){let n=u("unknown"),o=M(),a=Object.keys(game.system.documentTypes.Actor).map(s=>({type:s,value:(o[s]??"").trim(),placeholder:D(n,s)}));return{...super.getData(t),types:a,i18n:U("templates.names")}}activateListeners(t){super.activateListeners(t),t.find("[data-action=cancel]").on("click",()=>this.close())}async _updateObject(t,n){Y("names",n)}};r(N,"AnonymousNamesMenu");function Z({message:e,$html:t,isAnonymous:n,actor:o}){if(n&&e.rolls.length&&l("criticals")){let a=game.i18n.localize("DND5E.CriticalHit"),s=game.i18n.localize("DND5E.PowerfulCritical"),c=new RegExp(` (\\(([\\w ]*)?(?:${a}|${s})([\\w ]*)?\\))$`,"igm"),i=t.find("header .flavor-text");game.user.isGM&&k(i,c,' <span class="anonymous-replaced">$1</span>',!0),k(i,c,"",!0)}}r(Z,"dnd5ParseChat");function ee(){return game.system.id==="dnd5e"&&foundry.utils.isNewerVersion(game.system.version,"2.999.0")}r(ee,"isDnD3");function te(e){y({name:"pf2e.traits",type:String,default:"never",config:!0,choices:{never:p("pf2e.traits.choices.never"),rolls:p("pf2e.traits.choices.rolls"),always:p("pf2e.traits.choices.always")}})}r(te,"pf2eInitHook");function ne(e){e&&he()}r(ne,"pf2eReadyHook");function he(){let e="";if(game.settings.settings.has("pf2e.metagame.tokenSetsNameVisibility")?e="metagame.tokenSetsNameVisibility":game.settings.settings.has("pf2e.metagame_tokenSetsNameVisibility")&&(e="metagame_tokenSetsNameVisibility"),!e||!game.settings.get("pf2e",e))return;let t=E().title,n=game.i18n.localize("PF2E.SETTINGS.Metagame.TokenSetsNameVisibility.Name");game.settings.set("pf2e",e,!1),P("pf2e.disabled",{module:t,setting:n},!0)}r(he,"disableSettings");function re({message:e,isAnonymous:t,$html:n}){let o=game.user.isGM,a=e.target?.actor,s=l("criticals"),c=l("rolls");if(a&&!a.hasPlayerOwner&&!m(a)){let i=n.find('.flavor-text .target-dc [data-whose="target"]');if(i.length){let f=i.first();o?f.attr("data-visibility","gm"):f.text(u("pf2e.target",{name:d(a)}))}}if(!o&&t){let i=l("pf2e.traits");if(e.rolls.length)if(c){let f=n.find(".flavor-text hr + .tags");f.length&&(f.prev("hr").remove(),f.remove()),s&&n.find(".message-content .dice-roll .dice-result .dice-total").css("color","var(--color-text-dark-primary)"),i!=="never"&&n.find(".flavor-text .tags").remove()}else i==="always"&&n.find(".flavor-text .tags").first().remove();else i==="always"&&n.find(".message-content section.tags").remove()}if(t&&e.rolls.length&&c&&s){let i=game.i18n.localize("PF2E.Check.Result.Degree.Attack.criticalSuccess"),f=game.i18n.localize("PF2E.Check.Result.Degree.Attack.success"),S=new RegExp(`(\\((${i}|${f})\\))`,"gmi"),x=o?'<span class="anonymous-replaced">$1</span>':"",T=n.find("header .flavor-text");k(T,S,x,!0)}}r(re,"pf2eParseChat");var Se=/\(dc \d+\)/gim;function oe({message:e,isAnonymous:t,$html:n}){if(game.user.isGM)return;if(t&&l("rolls")){let i=n.find(".dice-tooltip");i.empty(),i.css("padding-top",0),l("criticals")&&n.find(".dice-total").removeClass("critical fumble");let f=n.find(".phase-saving-throws .phase-heading");f.text(f.text().replace(Se,""))}let o=n.find(".phase-attack .token-info .token-name"),a=e.getFlag("wire","activation.attack.targetActorUuid");if(o.length&&a)try{let i=fromUuidSync(a)?.actor;i&&!i.hasPlayerOwner&&!m(i)&&o.text(d(i))}catch(i){console.error(i)}let s=n.find(".phase-saving-throws .saving-throw-target:has(.target-name)"),c=e.getFlag("wire","activation.targetUuids");if(s.length&&c?.length)try{for(let i of c){let f=fromUuidSync(i)?.actor;f&&!f.hasPlayerOwner&&!m(f)&&s.filter(`[data-actor-id="${i}"]`).find(".target-name").text(d(f))}}catch(i){console.error(i)}}r(oe,"wireParseChat");var H=_(),L=_(),w=_();function ae(){switch(game.system.id){case"pf2e":H.add(te),L.add(ne),w.add(re);break;case"dnd5e":w.add(Z);break}game.modules.get("wire")?.active&&w.add(oe)}r(ae,"thirdPartyInitialization");function _(){let e=[],t=r(function(...n){e.forEach(o=>o(...n))},"f");return t.add=n=>e.push(n),t}r(_,"createThirdPartyListener");function ie(e,t){if(e.blind)return;t=t instanceof HTMLElement?$(t):t;let n=game.user.isGM,o=e.speaker,a=ChatMessage.getSpeakerActor(o),s=!a||m(a),c=!!a&&!a.hasPlayerOwner;if(a&&!s&&ke(e,a,t),!n&&c){if(e.rolls.length&&l("rolls")){let i=t.find(".message-content .dice-roll .dice-result");i.find(".dice-formula, .dice-tooltip").remove(),l("criticals")&&i.find(".dice-total").removeClass("critical fumble")}l("footer")&&t.find(".message-content footer.card-footer").remove(),l("cardContent")&&t.find(".message-content .card-content").remove()}w({message:e,actor:a,$html:t,playersCanSee:s,isAnonymous:c})}r(ie,"renderChatMessage");function ke(e,t,n){let o=e.speaker,a=new Set;if(o.alias&&a.add(o.alias),t.name&&a.add(t.name),o.token&&o.scene){let T=game.scenes.get(o.scene)?.tokens.get(o.token);T?.name&&a.add(T.name)}if(!a.size)return;let c=Array.from(a).map(x=>RegExp.escape(x)).join("|"),i=new RegExp(`(^|\\s)(${c})($|\\s)`,"gmi"),f=d(t),S=game.user.isGM?`$1<span class="anonymous-replaced" title="${f}">$2</span>$3`:`$1${f}$3`;k(n,i,S)}r(ke,"changeNames");function se(e,t){let n=ui.combat.viewed?.combatants;!n||!n.size||t.querySelectorAll(".combat-tracker .combatant").forEach(function(o){let a=o.dataset.combatantId,s=n.get(a);if(!s||!s.actor||s.actor.hasPlayerOwner)return;let c=m(s);if(game.user.isGM){let i=o.querySelector(".combatant-controls"),f=i.querySelector('.combatant-control[data-control="toggleHidden"]'),S=Ne(c);S.addEventListener("click",x=>xe(x,s)),f?f.after(S):i.appendChild(S)}else if(!c){let i=o.querySelector(".name");i.textContent=d(s)}})}r(se,"renderCombatTracker");function xe(e,t){e.preventDefault(),e.stopPropagation(),e.shiftKey&&t.actor&&t.actor.isToken&&game.combat?.scene?G(t).forEach(h):h(t)}r(xe,"toggleCombatantName");function Ne(e){let t=document.createElement("template"),n=e?"context.hide":"context.show";return t.innerHTML=`<a
-    class="combatant-control${e?" active":""}"
+(() => {
+  var __defProp = Object.defineProperty;
+  var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
+
+  // src/module.js
+  var MODULE_ID = "anonymous";
+  function templatePath(...path) {
+    path = path.filter((x) => typeof x === "string");
+    return `modules/${MODULE_ID}/templates/${path.join("/")}`;
+  }
+  __name(templatePath, "templatePath");
+  function isGM() {
+    const data = game.data;
+    const user = data.users.find((x) => x._id === data.userId);
+    return !!user && user.role >= CONST.USER_ROLES.GAMEMASTER;
+  }
+  __name(isGM, "isGM");
+  function getFlag(doc, key, fallback) {
+    return doc.getFlag(MODULE_ID, key) ?? fallback;
+  }
+  __name(getFlag, "getFlag");
+  function setFlag(doc, key, value) {
+    return doc.setFlag(MODULE_ID, key, value);
+  }
+  __name(setFlag, "setFlag");
+  function localize(...args) {
+    let [key, data] = args;
+    key = `${MODULE_ID}.${key}`;
+    if (data)
+      return game.i18n.format(key, data);
+    return game.i18n.localize(key);
+  }
+  __name(localize, "localize");
+  function subLocalize(subKey) {
+    const fn = /* @__PURE__ */ __name((...args) => localize(`${subKey}.${args[0]}`, args[1]), "fn");
+    Object.defineProperties(fn, {
+      warn: {
+        value: (...args) => warn(`${subKey}.${args[0]}`, args[1], args[2]),
+        enumerable: false,
+        configurable: false
+      },
+      info: {
+        value: (...args) => info(`${subKey}.${args[0]}`, args[1], args[2]),
+        enumerable: false,
+        configurable: false
+      },
+      error: {
+        value: (...args) => error(`${subKey}.${args[0]}`, args[1], args[2]),
+        enumerable: false,
+        configurable: false
+      },
+      has: {
+        value: (key) => hasLocalization(`${subKey}.${key}`),
+        enumerable: false,
+        configurable: false
+      },
+      path: {
+        value: (key) => localizePath(`${subKey}.${key}`),
+        enumerable: false,
+        configurable: false
+      },
+      template: {
+        value: (key, { hash }) => fn(key, hash),
+        enumerable: false,
+        configurable: false
+      }
+    });
+    return fn;
+  }
+  __name(subLocalize, "subLocalize");
+  function getSameCombatants(combatant) {
+    return combatant.combat.turns.filter((x) => x.actorId === combatant.actorId);
+  }
+  __name(getSameCombatants, "getSameCombatants");
+  function getSetting(key) {
+    return game.settings.get(MODULE_ID, key);
+  }
+  __name(getSetting, "getSetting");
+  function setSetting(key, value) {
+    return game.settings.set(MODULE_ID, key, value);
+  }
+  __name(setSetting, "setSetting");
+  function getActorSceneTokens(scene, actor, linkedOnly = false) {
+    return scene.tokens.filter(
+      (token) => token.actorId === actor.id && (!linkedOnly || token.actorLink)
+    );
+  }
+  __name(getActorSceneTokens, "getActorSceneTokens");
+  function getActorTokens(actor, linkedOnly = false) {
+    return game.scenes.map((scene) => getActorSceneTokens(scene, actor, linkedOnly)).flat();
+  }
+  __name(getActorTokens, "getActorTokens");
+  function capitalize(str) {
+    if (!str)
+      return "";
+    return str[0].toUpperCase() + str.slice(1);
+  }
+  __name(capitalize, "capitalize");
+  function registerSetting(options) {
+    const name = options.name;
+    options.scope = options.scope ?? "world";
+    options.config = options.config ?? false;
+    if (options.config) {
+      options.name = getSettingLocalizationPath(name, "name");
+      options.hint = getSettingLocalizationPath(name, "hint");
+    }
+    if (Array.isArray(options.choices)) {
+      options.choices = options.choices.reduce((choices, choice) => {
+        choices[choice] = getSettingLocalizationPath(name, "choices", choice);
+        return choices;
+      }, {});
+    }
+    game.settings.register(MODULE_ID, name, options);
+  }
+  __name(registerSetting, "registerSetting");
+  function registerSettingMenu(options) {
+    const name = options.name;
+    options.name = getSettingLocalizationPath("menus", name, "name");
+    options.label = getSettingLocalizationPath("menus", name, "label");
+    options.hint = getSettingLocalizationPath("menus", name, "hint");
+    options.restricted = options.restricted ?? true;
+    options.icon = options.icon ?? "fas fa-cogs";
+    game.settings.registerMenu(MODULE_ID, name, options);
+  }
+  __name(registerSettingMenu, "registerSettingMenu");
+  function getSettingLocalizationPath(...path) {
+    return `${MODULE_ID}.settings.${path.join(".")}`;
+  }
+  __name(getSettingLocalizationPath, "getSettingLocalizationPath");
+  function getCurrentModule() {
+    return game.modules.get(MODULE_ID);
+  }
+  __name(getCurrentModule, "getCurrentModule");
+  function notify(str, arg1, arg2, arg3) {
+    const type = typeof arg1 === "string" ? arg1 : "info";
+    const data = typeof arg1 === "object" ? arg1 : typeof arg2 === "object" ? arg2 : void 0;
+    const permanent = typeof arg1 === "boolean" ? arg1 : typeof arg2 === "boolean" ? arg2 : arg3 ?? false;
+    ui.notifications.notify(localize(str, data), type, { permanent });
+  }
+  __name(notify, "notify");
+  function warn(...args) {
+    const [str, arg1, arg2] = args;
+    notify(str, "warning", arg1, arg2);
+  }
+  __name(warn, "warn");
+  function info(...args) {
+    const [str, arg1, arg2] = args;
+    notify(str, "info", arg1, arg2);
+  }
+  __name(info, "info");
+  function error(...args) {
+    const [str, arg1, arg2] = args;
+    notify(str, "error", arg1, arg2);
+  }
+  __name(error, "error");
+  function replaceHTMLText(html, regexp, replacement, addSelf = false) {
+    let nodes = html.find("*");
+    if (addSelf)
+      nodes = nodes.addBack();
+    nodes.contents().each((_, el) => {
+      if (el.nodeType === Node.TEXT_NODE && el.textContent?.trim()) {
+        $(el).replaceWith(el.textContent.replace(regexp, replacement));
+      }
+    });
+  }
+  __name(replaceHTMLText, "replaceHTMLText");
+
+  // src/token.js
+  function updateActorTokens(actor, showName) {
+    if (actor.token)
+      changeDisplayName(actor.token, showName);
+    else
+      getActorTokens(actor, true).forEach((x) => changeDisplayName(x, showName));
+  }
+  __name(updateActorTokens, "updateActorTokens");
+  function renderTokenHUD(hud, html) {
+    const actor = hud.object.actor;
+    if (!actor || actor.hasPlayerOwner)
+      return;
+    const toggle = createToggle(actor);
+    toggle.addEventListener("click", () => toggleSeeName(actor));
+    html.querySelector(".col.right").append(toggle);
+  }
+  __name(renderTokenHUD, "renderTokenHUD");
+  function preCreateToken(token) {
+    const actor = token.actor;
+    if (!actor || actor?.hasPlayerOwner)
+      return;
+    const displayName = token.displayName;
+    const seeName = playersSeeName(token.actor);
+    const shows = isShowing(displayName);
+    let swap = displayName;
+    if (seeName && !shows && getSetting("token")) {
+      swap = swapToShow(displayName);
+    } else if (!seeName && shows) {
+      swap = swapToHide(displayName);
+    }
+    if (swap !== displayName) {
+      token.updateSource({ displayName: swap });
+    }
+  }
+  __name(preCreateToken, "preCreateToken");
+  function createToggle(actor) {
+    const tmp = document.createElement("template");
+    const toggled = playersSeeName(actor);
+    tmp.innerHTML = `<div class="control-icon${toggled ? " active" : ""}" data-action="anonymous-toggle">
+    <i class="fa-solid fa-signature" title="${localize("hud.title")}"></i>
+</div>`;
+    return tmp.content.firstChild;
+  }
+  __name(createToggle, "createToggle");
+  function changeDisplayName(token, showName) {
+    if (showName)
+      showTokenName(token);
+    else
+      hideTokenName(token);
+  }
+  __name(changeDisplayName, "changeDisplayName");
+  function showTokenName(token) {
+    const displayName = token.displayName;
+    if (isShowing(displayName) || !getSetting("token"))
+      return;
+    let swap = swapToShow(displayName);
+    if (swap !== displayName) {
+      token.update({ displayName: swap });
+    }
+  }
+  __name(showTokenName, "showTokenName");
+  function hideTokenName(token) {
+    const displayName = token.displayName;
+    if (isHidding(displayName))
+      return;
+    const swap = swapToHide(displayName);
+    token.update({ displayName: swap });
+  }
+  __name(hideTokenName, "hideTokenName");
+  function isHidding(displayName) {
+    return !isShowing(displayName);
+  }
+  __name(isHidding, "isHidding");
+  function isShowing(displayName) {
+    return displayName === CONST.TOKEN_DISPLAY_MODES.HOVER || displayName === CONST.TOKEN_DISPLAY_MODES.ALWAYS;
+  }
+  __name(isShowing, "isShowing");
+  function swapToHide(displayName) {
+    if (displayName === CONST.TOKEN_DISPLAY_MODES.HOVER)
+      return CONST.TOKEN_DISPLAY_MODES.OWNER_HOVER;
+    if (displayName === CONST.TOKEN_DISPLAY_MODES.ALWAYS)
+      return CONST.TOKEN_DISPLAY_MODES.OWNER;
+    return displayName;
+  }
+  __name(swapToHide, "swapToHide");
+  function swapToShow(displayName) {
+    if (displayName === CONST.TOKEN_DISPLAY_MODES.OWNER_HOVER)
+      return CONST.TOKEN_DISPLAY_MODES.HOVER;
+    if (displayName === CONST.TOKEN_DISPLAY_MODES.OWNER)
+      return CONST.TOKEN_DISPLAY_MODES.ALWAYS;
+    return displayName;
+  }
+  __name(swapToShow, "swapToShow");
+
+  // src/api.js
+  function playersSeeName(doc) {
+    if (doc instanceof Combatant && doc.actor)
+      doc = doc.actor;
+    if (doc instanceof Actor && doc.hasPlayerOwner)
+      return true;
+    return !!getFlag(doc, "showName");
+  }
+  __name(playersSeeName, "playersSeeName");
+  async function toggleSeeName(doc) {
+    const showName = !playersSeeName(doc);
+    if (doc instanceof Actor || !doc.actor)
+      await setFlag(doc, "showName", showName);
+    else
+      await setFlag(doc.actor, "showName", showName);
+    if (canvas.tokens.hud?.rendered)
+      canvas.tokens.hud.render();
+    const actor = doc instanceof Actor ? doc : doc.actor;
+    if (actor)
+      updateActorTokens(actor, showName);
+    return showName;
+  }
+  __name(toggleSeeName, "toggleSeeName");
+  function getName(doc) {
+    const unknown = localize("unknown");
+    const type = doc instanceof Actor ? doc.type : doc.actor?.type;
+    if (!type)
+      return unknown;
+    const saved = (getSavedNames()[type] ?? "").trim();
+    return saved || formatUnknown(unknown, type);
+  }
+  __name(getName, "getName");
+  function refresh() {
+    ui.combat.render();
+  }
+  __name(refresh, "refresh");
+  function getSavedNames() {
+    return getSetting("names");
+  }
+  __name(getSavedNames, "getSavedNames");
+  function formatUnknown(unknown, type) {
+    return `${unknown} ${capitalize(type)}`;
+  }
+  __name(formatUnknown, "formatUnknown");
+
+  // src/actor.js
+  function getActorDirectoryEntryContext(html, entries) {
+    addSelectContextEntry({
+      entries,
+      defaultData: {
+        name: (choice) => localize(`context.${choice}`),
+        icon: "fa-solid fa-signature",
+        callback: ($li) => {
+          const id = $li.attr("data-document-id");
+          const actor = game.actors.get(id);
+          if (actor)
+            toggleSeeName(actor);
+        },
+        condition: ($li, choice) => {
+          const id = $li.attr("data-document-id");
+          const actor = game.actors.get(id);
+          return !!actor && !actor.hasPlayerOwner && (choice === "show" ? !playersSeeName(actor) : playersSeeName(actor));
+        }
+      },
+      choices: ["show", "hide"]
+    });
+  }
+  __name(getActorDirectoryEntryContext, "getActorDirectoryEntryContext");
+  function onActorUpdate(actor, data) {
+    let needsRefresh = foundry.utils.getProperty(data, `flags.${MODULE_ID}.showName}`) !== void 0;
+    if ("ownership" in data) {
+      updateActorTokens(actor, actor.hasPlayerOwner);
+      needsRefresh = true;
+    }
+    if (needsRefresh)
+      refresh();
+  }
+  __name(onActorUpdate, "onActorUpdate");
+  function addSelectContextEntry({ entries, choices, defaultData = {} }) {
+    if (Array.isArray(choices)) {
+      choices = choices.reduce((acc, curr) => {
+        acc[curr] = {};
+        return acc;
+      }, {});
+    }
+    for (const key in choices) {
+      const choice = choices[key];
+      const name = choice.name ?? (typeof defaultData.name === "function" ? defaultData.name(key) : defaultData.name) ?? "";
+      let icon = choice.icon ?? (typeof defaultData.icon === "function" ? defaultData.icon(key) : defaultData.icon) ?? "";
+      if (!$(icon).length) {
+        const $icon = $("<i></i>");
+        $icon.addClass(icon);
+        icon = $icon[0].outerHTML;
+      }
+      entries.unshift({
+        name,
+        icon,
+        callback: ($li) => {
+          if (choice.callback)
+            choice.callback($li);
+          else if (defaultData.callback)
+            defaultData.callback($li, key);
+        },
+        condition: ($li) => choice.condition?.($li) ?? defaultData.condition?.($li, key) ?? true
+      });
+    }
+  }
+  __name(addSelectContextEntry, "addSelectContextEntry");
+
+  // src/apps/names.js
+  var AnonymousNamesMenu = class extends FormApplication {
+    static get defaultOptions() {
+      return foundry.utils.mergeObject(super.defaultOptions, {
+        id: "anonymous-names-menu",
+        title: localize("templates.names.title"),
+        template: templatePath("names.html"),
+        width: 400
+      });
+    }
+    getData(options) {
+      const unknown = localize("unknown");
+      const saved = getSavedNames();
+      const types = Object.keys(game.system.documentTypes.Actor).map((x) => ({
+        type: x,
+        value: (saved[x] ?? "").trim(),
+        placeholder: formatUnknown(unknown, x)
+      }));
+      return {
+        ...super.getData(options),
+        types,
+        i18n: subLocalize("templates.names")
+      };
+    }
+    activateListeners(html) {
+      super.activateListeners(html);
+      html.find("[data-action=cancel]").on("click", () => this.close());
+    }
+    async _updateObject(event, formData) {
+      setSetting("names", formData);
+    }
+  };
+  __name(AnonymousNamesMenu, "AnonymousNamesMenu");
+
+  // src/third/dnd5e.js
+  function dnd5ParseChat({ message, $html, isAnonymous, actor }) {
+    if (!isAnonymous)
+      return;
+    if (message.rolls.length && getSetting("criticals")) {
+      const critical = game.i18n.localize("DND5E.CriticalHit");
+      const powerful = game.i18n.localize("DND5E.PowerfulCritical");
+      const regexp = new RegExp(
+        ` (\\(([\\w ]*)?(?:${critical}|${powerful})([\\w ]*)?\\))$`,
+        "igm"
+      );
+      const $flavor = $html.find("header .flavor-text");
+      if (game.user.isGM)
+        replaceHTMLText($flavor, regexp, ' <span class="anonymous-replaced">$1</span>', true);
+      replaceHTMLText($flavor, regexp, "", true);
+    }
+  }
+  __name(dnd5ParseChat, "dnd5ParseChat");
+  function isDnD3() {
+    return game.system.id === "dnd5e" && foundry.utils.isNewerVersion(game.system.version, "2.999.0");
+  }
+  __name(isDnD3, "isDnD3");
+
+  // src/third/pf2e.js
+  function pf2eInitHook(isGM2) {
+    registerSetting({
+      name: "pf2e.traits",
+      type: String,
+      default: "never",
+      config: true,
+      choices: {
+        never: getSettingLocalizationPath("pf2e.traits.choices.never"),
+        rolls: getSettingLocalizationPath("pf2e.traits.choices.rolls"),
+        always: getSettingLocalizationPath("pf2e.traits.choices.always")
+      }
+    });
+  }
+  __name(pf2eInitHook, "pf2eInitHook");
+  function pf2eReadyHook(isGM2) {
+    if (isGM2)
+      disableSettings();
+  }
+  __name(pf2eReadyHook, "pf2eReadyHook");
+  function disableSettings() {
+    let key = "";
+    if (game.settings.settings.has("pf2e.metagame.tokenSetsNameVisibility"))
+      key = "metagame.tokenSetsNameVisibility";
+    else if (game.settings.settings.has("pf2e.metagame_tokenSetsNameVisibility"))
+      key = "metagame_tokenSetsNameVisibility";
+    if (!key || !game.settings.get("pf2e", key))
+      return;
+    const module = getCurrentModule().title;
+    const setting = game.i18n.localize("PF2E.SETTINGS.Metagame.TokenSetsNameVisibility.Name");
+    game.settings.set("pf2e", key, false);
+    warn("pf2e.disabled", { module, setting }, true);
+  }
+  __name(disableSettings, "disableSettings");
+  function pf2eParseChat({ message, isAnonymous, $html }) {
+    const isGM2 = game.user.isGM;
+    const target = message.target?.actor;
+    const criticals = getSetting("criticals");
+    const rolls = getSetting("rolls");
+    if (target && !target.hasPlayerOwner && !playersSeeName(target)) {
+      const $targets = $html.find('.flavor-text .target-dc [data-whose="target"]');
+      if ($targets.length) {
+        const $target = $targets.first();
+        if (isGM2)
+          $target.attr("data-visibility", "gm");
+        else
+          $target.text(localize("pf2e.target", { name: getName(target) }));
+      }
+    }
+    if (!isGM2 && isAnonymous) {
+      const traits = getSetting("pf2e.traits");
+      if (message.rolls.length) {
+        if (rolls) {
+          const $tags = $html.find(".flavor-text hr + .tags");
+          if ($tags.length) {
+            $tags.prev("hr").remove();
+            $tags.remove();
+          }
+          if (criticals) {
+            $html.find(".message-content .dice-roll .dice-result .dice-total").css("color", "var(--color-text-dark-primary)");
+          }
+          if (traits !== "never") {
+            $html.find(".flavor-text .tags").remove();
+          }
+        } else if (traits === "always") {
+          $html.find(".flavor-text .tags").first().remove();
+        }
+      } else if (traits === "always") {
+        $html.find(".message-content section.tags").remove();
+      }
+    }
+    if (isAnonymous && message.rolls.length && rolls && criticals) {
+      const critical = game.i18n.localize("PF2E.Check.Result.Degree.Attack.criticalSuccess");
+      const hit = game.i18n.localize("PF2E.Check.Result.Degree.Attack.success");
+      const regex = new RegExp(`(\\((${critical}|${hit})\\))`, "gmi");
+      const str = isGM2 ? '<span class="anonymous-replaced">$1</span>' : "";
+      const flavor = $html.find("header .flavor-text");
+      replaceHTMLText(flavor, regex, str, true);
+    }
+  }
+  __name(pf2eParseChat, "pf2eParseChat");
+
+  // src/third/wire.js
+  var SAVE = /\(dc \d+\)/gim;
+  function wireParseChat({ message, isAnonymous, $html }) {
+    if (game.user.isGM)
+      return;
+    if (isAnonymous) {
+      if (getSetting("rolls")) {
+        const $tooltips = $html.find(".dice-tooltip");
+        $tooltips.empty();
+        $tooltips.css("padding-top", 0);
+        if (getSetting("criticals")) {
+          $html.find(".dice-total").removeClass("critical fumble");
+        }
+        const $save = $html.find(".phase-saving-throws .phase-heading");
+        $save.text($save.text().replace(SAVE, ""));
+      }
+    }
+    const $target = $html.find(".phase-attack .token-info .token-name");
+    const targetUUID = message.getFlag("wire", "activation.attack.targetActorUuid");
+    if ($target.length && targetUUID) {
+      try {
+        const target = fromUuidSync(targetUUID)?.actor;
+        if (target && !target.hasPlayerOwner && !playersSeeName(target)) {
+          $target.text(getName(target));
+        }
+      } catch (error2) {
+        console.error(error2);
+      }
+    }
+    const $targets = $html.find(".phase-saving-throws .saving-throw-target:has(.target-name)");
+    const targetsUUID = message.getFlag("wire", "activation.targetUuids");
+    if ($targets.length && targetsUUID?.length) {
+      try {
+        for (const uuid of targetsUUID) {
+          const target = fromUuidSync(uuid)?.actor;
+          if (target && !target.hasPlayerOwner && !playersSeeName(target)) {
+            $targets.filter(`[data-actor-id="${uuid}"]`).find(".target-name").text(getName(target));
+          }
+        }
+      } catch (error2) {
+        console.error(error2);
+      }
+    }
+  }
+  __name(wireParseChat, "wireParseChat");
+
+  // src/third.js
+  var thirdPartyInitHooks = createThirdPartyListener();
+  var thirdPartyReadyHooks = createThirdPartyListener();
+  var thirdPartyChatParse = createThirdPartyListener();
+  function thirdPartyInitialization() {
+    switch (game.system.id) {
+      case "pf2e":
+        thirdPartyInitHooks.add(pf2eInitHook);
+        thirdPartyReadyHooks.add(pf2eReadyHook);
+        thirdPartyChatParse.add(pf2eParseChat);
+        break;
+      case "dnd5e":
+        thirdPartyChatParse.add(dnd5ParseChat);
+        break;
+    }
+    if (game.modules.get("wire")?.active) {
+      thirdPartyChatParse.add(wireParseChat);
+    }
+  }
+  __name(thirdPartyInitialization, "thirdPartyInitialization");
+  function createThirdPartyListener() {
+    const a = [];
+    const f = /* @__PURE__ */ __name(function(...args) {
+      a.forEach((x) => x(...args));
+    }, "f");
+    f.add = (fn) => a.push(fn);
+    return f;
+  }
+  __name(createThirdPartyListener, "createThirdPartyListener");
+
+  // src/chat.js
+  function renderChatMessage(message, html) {
+    if (message.blind)
+      return;
+    html = html instanceof HTMLElement ? $(html) : html;
+    const isGM2 = game.user.isGM;
+    const speaker = message.speaker;
+    const actor = ChatMessage.getSpeakerActor(speaker);
+    const playersCanSee = !actor || playersSeeName(actor);
+    const isAnonymous = !!actor && !actor.hasPlayerOwner;
+    if (actor && !playersCanSee)
+      changeNames(message, actor, html);
+    if (!isGM2 && isAnonymous) {
+      if (message.rolls.length && getSetting("rolls")) {
+        const $result = html.find(".message-content .dice-roll .dice-result");
+        $result.find(".dice-formula, .dice-tooltip").remove();
+        if (getSetting("criticals"))
+          $result.find(".dice-total").removeClass("critical fumble");
+      }
+      if (getSetting("footer"))
+        html.find(".message-content footer.card-footer").remove();
+      if (getSetting("cardContent"))
+        html.find(".message-content .card-content").remove();
+    }
+    thirdPartyChatParse({ message, actor, $html: html, playersCanSee, isAnonymous });
+  }
+  __name(renderChatMessage, "renderChatMessage");
+  function changeNames(message, actor, html) {
+    const speaker = message.speaker;
+    const names = /* @__PURE__ */ new Set();
+    if (speaker.alias)
+      names.add(speaker.alias);
+    if (actor.name)
+      names.add(actor.name);
+    if (speaker.token && speaker.scene) {
+      const scene = game.scenes.get(speaker.scene);
+      const token = scene?.tokens.get(speaker.token);
+      if (token?.name)
+        names.add(token.name);
+    }
+    if (!names.size)
+      return;
+    const escaped = Array.from(names).map((x) => RegExp.escape(x));
+    const joined = escaped.join("|");
+    const regexp = new RegExp(`(^|\\s)(${joined})($|\\s)`, "gmi");
+    const renamed = getName(actor);
+    const replacement = game.user.isGM ? `$1<span class="anonymous-replaced" title="${renamed}">$2</span>$3` : `$1${renamed}$3`;
+    replaceHTMLText(html, regexp, replacement);
+  }
+  __name(changeNames, "changeNames");
+
+  // src/tracker.js
+  function renderCombatTracker(tracker, html) {
+    const combatants = ui.combat.viewed?.combatants;
+    if (!combatants || !combatants.size)
+      return;
+    html.querySelectorAll(".combat-tracker .combatant").forEach(function(elem) {
+      const id = elem.dataset.combatantId;
+      const combatant = combatants.get(id);
+      if (!combatant || !combatant.actor || combatant.actor.hasPlayerOwner)
+        return;
+      const showName = playersSeeName(combatant);
+      if (game.user.isGM) {
+        const controls = elem.querySelector(".combatant-controls");
+        const hidden = controls.querySelector('.combatant-control[data-control="toggleHidden"]');
+        const toggle = createToggle2(showName);
+        toggle.addEventListener("click", (event) => toggleCombatantName(event, combatant));
+        if (hidden)
+          hidden.after(toggle);
+        else
+          controls.appendChild(toggle);
+      } else if (!showName) {
+        const nameElem = elem.querySelector(".name");
+        nameElem.textContent = getName(combatant);
+      }
+    });
+    html.querySelectorAll(".combat-tracker .combatant-group").forEach(function(groupElement) {
+      const groupCombatants = Array.from(groupElement.querySelectorAll(".combatant")).map((elem) => {
+        const id = elem.dataset.combatantId;
+        const combatant = combatants.get(id);
+        if (!combatant || !combatant.actor || combatant.actor.hasPlayerOwner)
+          return;
+        return combatant;
+      }).filter((c) => c);
+      if (!groupCombatants.length) {
+        return;
+      }
+      const showName = groupCombatants.every((combatant) => playersSeeName(combatant));
+      if (game.user.isGM) {
+      } else if (!showName) {
+        const combatant = groupCombatants[0];
+        const nameElem = groupElement.querySelector(".group-header .name");
+        nameElem.textContent = `${getName(combatant)} ${localize("group")}`;
+      }
+    });
+  }
+  __name(renderCombatTracker, "renderCombatTracker");
+  function toggleCombatantName(event, combatant) {
+    event.preventDefault();
+    event.stopPropagation();
+    if (event.shiftKey && combatant.actor && combatant.actor.isToken && game.combat?.scene) {
+      getSameCombatants(combatant).forEach(toggleSeeName);
+    } else {
+      toggleSeeName(combatant);
+    }
+  }
+  __name(toggleCombatantName, "toggleCombatantName");
+  function createToggle2(active) {
+    const tmp = document.createElement("template");
+    const tooltip = active ? "context.hide" : "context.show";
+    tmp.innerHTML = `<a
+    class="combatant-control${active ? " active" : ""}"
     data-control="toggle-name-visibility"
-    data-tooltip="${u(n)}"
+    data-tooltip="${localize(tooltip)}"
 >
     <i class="fa-solid fa-signature"></i>
-</a>`,t.content.firstChild}r(Ne,"createToggle");Hooks.once("init",()=>{y({name:"version",type:String,default:""}),y({name:"names",type:Object,default:{},onChange:C}),y({name:"token",type:Boolean,default:!0,config:!0}),y({name:"rolls",type:Boolean,default:!0,config:!0}),y({name:"criticals",type:Boolean,default:!0,config:!0}),y({name:"cardContent",type:Boolean,default:!1,config:!0}),y({name:"footer",type:Boolean,default:!1,config:!0}),V({name:"namesMenu",type:N}),E().api={playersSeeName:m,toggleSeeName:h,getName:d};let e=z();e&&(Hooks.on("getActorDirectoryEntryContext",J),Hooks.on("renderTokenHUD",B)),ae(),H(e),Hooks.on("renderCombatTracker",se),Hooks.on(ee()?"dnd5e.renderChatMessage":"renderChatMessage",ie),Hooks.on("preCreateToken",K),Hooks.on("updateActor",Q)});Hooks.once("ready",()=>{L(game.user.isGM)});})();
+</a>`;
+    return tmp.content.firstChild;
+  }
+  __name(createToggle2, "createToggle");
+
+  // src/main.js
+  Hooks.once("init", () => {
+    registerSetting({
+      name: "version",
+      type: String,
+      default: ""
+    });
+    registerSetting({
+      name: "names",
+      type: Object,
+      default: {},
+      onChange: refresh
+    });
+    registerSetting({
+      name: "token",
+      type: Boolean,
+      default: true,
+      config: true
+    });
+    registerSetting({
+      name: "rolls",
+      type: Boolean,
+      default: true,
+      config: true
+    });
+    registerSetting({
+      name: "criticals",
+      type: Boolean,
+      default: true,
+      config: true
+    });
+    registerSetting({
+      name: "cardContent",
+      type: Boolean,
+      default: false,
+      config: true
+    });
+    registerSetting({
+      name: "footer",
+      type: Boolean,
+      default: false,
+      config: true
+    });
+    registerSettingMenu({
+      name: "namesMenu",
+      type: AnonymousNamesMenu
+    });
+    getCurrentModule().api = {
+      playersSeeName,
+      toggleSeeName,
+      getName
+    };
+    const gm = isGM();
+    if (gm) {
+      Hooks.on("getActorDirectoryEntryContext", getActorDirectoryEntryContext);
+      Hooks.on("renderTokenHUD", renderTokenHUD);
+    }
+    thirdPartyInitialization();
+    thirdPartyInitHooks(gm);
+    Hooks.on("renderCombatTracker", renderCombatTracker);
+    Hooks.on(isDnD3() ? "dnd5e.renderChatMessage" : "renderChatMessage", renderChatMessage);
+    Hooks.on("preCreateToken", preCreateToken);
+    Hooks.on("updateActor", onActorUpdate);
+  });
+  Hooks.once("ready", () => {
+    thirdPartyReadyHooks(game.user.isGM);
+  });
+})();
 //# sourceMappingURL=main.js.map
