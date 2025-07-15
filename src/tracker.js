@@ -26,6 +26,29 @@ export function renderCombatTracker(tracker, html) {
             nameElem.textContent = getName(combatant)
         }
     })
+
+    html.querySelectorAll(".combat-tracker .combatant-group").forEach(function(groupElement) {    
+        const groupCombatants = Array.from(groupElement.querySelectorAll(".combatant")).map(elem => {
+            const id = elem.dataset.combatantId
+            const combatant = combatants.get(id)
+            if (!combatant || !combatant.actor || combatant.actor.hasPlayerOwner) return;
+            return combatant;
+        }).filter(c => c)
+
+        if(!groupCombatants.length) {
+            return;
+        }
+
+        const showName = groupCombatants.every(combatant => playersSeeName(combatant))
+
+        if (game.user.isGM) {
+            // TODO: Add a control to toggle show names for all groups
+        } else if (!showName) {
+            const combatant = groupCombatants[0]
+            const nameElem = groupElement.querySelector('.group-header .name')
+            nameElem.textContent = `${getName(combatant)} ${localize('group')}`
+        }
+    })
 }
 
 function toggleCombatantName(event, combatant) {

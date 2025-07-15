@@ -12,7 +12,7 @@ export function renderTokenHUD(hud, html) {
 
     const toggle = createToggle(actor)
     toggle.addEventListener('click', () => toggleSeeName(actor))
-    html.find('.col.right').append(toggle)
+    html.querySelector('.col.right').append(toggle)
 }
 
 export function preCreateToken(token) {

@@ -51,6 +51,7 @@
         },
 
         "unknown": "Unknown",
+        "group": "Group",
 
         "pf2e": {
             "disabled": "The system setting '{setting}' has been disabled to avoid conflicts with the module '{module}'.",
